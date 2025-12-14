@@ -51,7 +51,7 @@ int main(){
         cout << "9. Admin: Clear All Tasks\n";
         cout << "10. Admin: Export Schedule with Timestamp\n";
         cout << "11. Exit\n";
-        cout << "Choice: ";
+        cout << "Choice: ";         
         cin >> choice;
         cin.ignore();
 
@@ -89,20 +89,13 @@ int main(){
             default: cout << "Invalid choice!\n";
         }
     } while(choice != 11);
+
     return 0;
 }
 
-// 2. Calculate end times
-void calculateEndTimes() {
-    for(int i = 0; i < totalTasks; i++) {
-        int h = taskStarts[i] / 100;
-        int m = taskStarts[i] % 100 + taskDurations[i];
-        h += m / 60;
-        m %= 60;
-        taskEnds[i] = h * 100 + m;
-    }
-}
+// ------------------- Function Definitions -------------------
 
+// 1. Add Task
 void addTask() {
     if(totalTasks >= MAX_TASKS) { cout << "Max tasks reached!\n"; return; }
     cout << "Task Name: "; cin.getline(taskNames[totalTasks], STR_LEN);
@@ -115,14 +108,23 @@ void addTask() {
     cout << "Task added!\n";
 }
 
+// 2. Calculate End Times
+void calculateEndTimes() {
+    for(int i = 0; i < totalTasks; i++) {
+        int h = taskStarts[i] / 100;
+        int m = taskStarts[i] % 100 + taskDurations[i];
+        h += m / 60;
+        m %= 60;
+        taskEnds[i] = h * 100 + m;
+    }
+}
 
-
-// 3. Conflict check
+// 3. Conflict Check
 bool hasConflict(int i, int j) {
     return (taskStarts[i] < taskEnds[j] && taskEnds[i] > taskStarts[j]);
 }
 
-// 4. Detect all conflicts
+// 4. Detect All Conflicts
 void detectConflicts() {
     cout << "\n=== CONFLICTS ===\n";
     bool found = false;
@@ -138,20 +140,20 @@ void detectConflicts() {
     if(!found) cout << "No conflicts!\n";
 }
 
-// 5. Priority sort (Selection Sort)
+// 5. Sort by Priority (Selection Sort)
 void sortByPriority() {
     calculateEndTimes();
     for(int i = 0; i < totalTasks-1; i++) {
         int best = i;
         for(int j = i+1; j < totalTasks; j++)
             if(taskPriorities[j] < taskPriorities[best] ||
-              (taskPriorities[j] == taskPriorities[best] && taskDurations[j] < taskDurations[best]))
+               (taskPriorities[j] == taskPriorities[best] && taskDurations[j] < taskDurations[best]))
                 best = j;
         if(best != i) swapTasks(i, best);
     }
 }
 
-// 6. Duration sort
+// 6. Sort by Duration
 void sortByDuration() {
     calculateEndTimes();
     for(int i = 0; i < totalTasks-1; i++) {
@@ -163,7 +165,7 @@ void sortByDuration() {
     }
 }
 
-// 7. Pointer-based swap
+// 7. Swap Tasks (Pointer-based)
 void swapTasks(int i, int j) {
     // Swap names
     char tempName[STR_LEN];
@@ -173,6 +175,7 @@ void swapTasks(int i, int j) {
 
     // Swap integers using pointers
     int *p1, *p2, temp;
+
     p1 = &taskStarts[i]; p2 = &taskStarts[j];
     temp = *p1; *p1 = *p2; *p2 = temp;
 
@@ -185,6 +188,7 @@ void swapTasks(int i, int j) {
     p1 = &taskPriorities[i]; p2 = &taskPriorities[j];
     temp = *p1; *p1 = *p2; *p2 = temp;
 }
+
 void displaySchedule() {
     if(totalTasks == 0) { cout << "No tasks!\n"; return; }
     cout << "\n========================================\n";
