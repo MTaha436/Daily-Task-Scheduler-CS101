@@ -189,6 +189,7 @@ void swapTasks(int i, int j) {
     temp = *p1; *p1 = *p2; *p2 = temp;
 }
 
+// 8. Display Schedule
 void displaySchedule() {
     if(totalTasks == 0) { cout << "No tasks!\n"; return; }
     cout << "\n========================================\n";
@@ -202,10 +203,12 @@ void displaySchedule() {
     }
 }
 
+// 9. Print Time
 void printTime(int t) {
     cout << setfill('0') << setw(2) << t/100 << ":" << setw(2) << t%100;
 }
 
+// 10. Save Schedule to File
 void saveToFile() {
     ofstream f("schedule.dat");
     f << totalTasks << "\n";
@@ -217,6 +220,7 @@ void saveToFile() {
     cout << "Saved!\n";
 }
 
+// 11. Load Schedule from File
 void loadFromFile() {
     ifstream f("schedule.dat");
     if(!f) { cout << "No saved file!\n"; return; }
@@ -231,11 +235,13 @@ void loadFromFile() {
     cout << "Loaded " << totalTasks << " tasks!\n";
 }
 
+// 12. Admin: Clear All Tasks
 void adminClearAll() {
     cout << "ADMIN: All tasks cleared!\n";
     totalTasks = 0;
 }
 
+// 13. Admin: Export Schedule with Timestamp
 void adminExportWithTimestamp() {
     time_t now = time(0);
     char filename[100];
@@ -251,12 +257,12 @@ void adminExportWithTimestamp() {
     cout << "Exported to " << filename << "\n";
 }
 
-// Renamed recursive function
+// 14. Recursive Search by Task Name
 int findTaskRecursively(char target[], int low, int high) {
     if(low > high) return -1;                          // Base case
     int mid = low + (high - low) / 2;
     if(strcmp(taskNames[mid], target) == 0) return mid; // Found
     if(strcmp(taskNames[mid], target) < 0)
         return findTaskRecursively(target, mid + 1, high);
-    return findTaskRecursively(target, low, mid - 1);
+    return findTaskRecursively(target, low, mid - 1);
 }
