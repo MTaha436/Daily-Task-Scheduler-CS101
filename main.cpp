@@ -2,7 +2,7 @@
 #include <fstream>
 #include <cstring>
 #include <iomanip>
-#include <ctime>        // for timestamp in export
+#include <ctime>       
 using namespace std;
 
 const int MAX_TASKS = 100;
@@ -93,9 +93,8 @@ int main(){
     return 0;
 }
 
-// ------------------- Function Definitions -------------------
 
-// 1. Add Task
+
 void addTask() {
     if(totalTasks >= MAX_TASKS) { cout << "Max tasks reached!\n"; return; }
     cout << "Task Name: "; cin.getline(taskNames[totalTasks], STR_LEN);
@@ -108,7 +107,7 @@ void addTask() {
     cout << "Task added!\n";
 }
 
-// 2. Calculate End Times
+
 void calculateEndTimes() {
     for(int i = 0; i < totalTasks; i++) {
         int h = taskStarts[i] / 100;
@@ -119,12 +118,12 @@ void calculateEndTimes() {
     }
 }
 
-// 3. Conflict Check
+
 bool hasConflict(int i, int j) {
     return (taskStarts[i] < taskEnds[j] && taskEnds[i] > taskStarts[j]);
 }
 
-// 4. Detect All Conflicts
+
 void detectConflicts() {
     cout << "\n=== CONFLICTS ===\n";
     bool found = false;
@@ -140,7 +139,7 @@ void detectConflicts() {
     if(!found) cout << "No conflicts!\n";
 }
 
-// 5. Sort by Priority (Selection Sort)
+
 void sortByPriority() {
     calculateEndTimes();
     for(int i = 0; i < totalTasks-1; i++) {
@@ -153,7 +152,7 @@ void sortByPriority() {
     }
 }
 
-// 6. Sort by Duration
+
 void sortByDuration() {
     calculateEndTimes();
     for(int i = 0; i < totalTasks-1; i++) {
@@ -165,7 +164,6 @@ void sortByDuration() {
     }
 }
 
-// 7. Swap Tasks (Pointer-based)
 void swapTasks(int i, int j) {
     // Swap names
     char tempName[STR_LEN];
@@ -173,7 +171,7 @@ void swapTasks(int i, int j) {
     strcpy(taskNames[i], taskNames[j]);
     strcpy(taskNames[j], tempName);
 
-    // Swap integers using pointers
+
     int *p1, *p2, temp;
 
     p1 = &taskStarts[i]; p2 = &taskStarts[j];
@@ -189,7 +187,7 @@ void swapTasks(int i, int j) {
     temp = *p1; *p1 = *p2; *p2 = temp;
 }
 
-// 8. Display Schedule
+
 void displaySchedule() {
     if(totalTasks == 0) { cout << "No tasks!\n"; return; }
     cout << "\n========================================\n";
@@ -203,12 +201,11 @@ void displaySchedule() {
     }
 }
 
-// 9. Print Time
+
 void printTime(int t) {
     cout << setfill('0') << setw(2) << t/100 << ":" << setw(2) << t%100;
 }
 
-// 10. Save Schedule to File
 void saveToFile() {
     ofstream f("schedule.dat");
     f << totalTasks << "\n";
@@ -220,7 +217,6 @@ void saveToFile() {
     cout << "Saved!\n";
 }
 
-// 11. Load Schedule from File
 void loadFromFile() {
     ifstream f("schedule.dat");
     if(!f) { cout << "No saved file!\n"; return; }
@@ -235,13 +231,13 @@ void loadFromFile() {
     cout << "Loaded " << totalTasks << " tasks!\n";
 }
 
-// 12. Admin: Clear All Tasks
+
 void adminClearAll() {
     cout << "ADMIN: All tasks cleared!\n";
     totalTasks = 0;
 }
 
-// 13. Admin: Export Schedule with Timestamp
+
 void adminExportWithTimestamp() {
     time_t now = time(0);
     char filename[100];
@@ -257,7 +253,7 @@ void adminExportWithTimestamp() {
     cout << "Exported to " << filename << "\n";
 }
 
-// 14. Recursive Search by Task Name
+
 int findTaskRecursively(char target[], int low, int high) {
     if(low > high) return -1;                          // Base case
     int mid = low + (high - low) / 2;
